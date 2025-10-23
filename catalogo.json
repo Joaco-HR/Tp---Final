@@ -1,0 +1,101 @@
+[
+    {
+        "Producto": "Cómic",
+        "Editorial": "DC",
+        "Género": "Superhéroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Batman",
+        "Título": "Batman Return",
+        "Precio": 32400,
+        "Stock": true,
+        "Código": "DC-B01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "DC",
+        "Género": "Superhéroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Superman",
+        "Título": "Superman: Man of Tomorrow",
+        "Precio": 36000,
+        "Stock": true,
+        "Código": "DC-S01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "DC",
+        "Género": "Superhéroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Wonder Woman",
+        "Título": "Wonder Woman: Spirit of Truth",
+        "Precio": 49000,
+        "Stock": true,
+        "Código": "DC-WW01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "DC",
+        "Género": "Superhéroes",
+        "Alineación": "Equipo",
+        "Personaje/Equipo": "Justice League",
+        "Título": "La Trinidad",
+        "Precio": 50000,
+        "Stock": false,
+        "Código": "DC-JL01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "Marvel",
+        "Género": "Superhéroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Spider-Man",
+        "Título": "Spider-Man: First Year",
+        "Precio": 46000,
+        "Stock": true,
+        "Código": "MAR-S01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "Marvel",
+        "Género": "Superhéroes",
+        "Alineación": "Equipo",
+        "Personaje/Equipo": "Avengers",
+        "Título": "Civil War",
+        "Precio": 50000,
+        "Stock": true,
+        "Código": "MAR-AV01"
+    },
+    {
+        "Producto": "Manga",
+        "Editorial": "Ivrea",
+        "Género": "Bizarro",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Jojo",
+        "Título": "Steel Ball Run",
+        "Precio": 17000,
+        "Stock": false,
+        "Código": "JO-JO01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "DC",
+        "Género": "SuperHeroes",
+        "Alineación": "Equipo",
+        "Personaje/Equipo": "Teen Titans",
+        "Título": "Teen Titans and The Judas Contract",
+        "Precio": 45000,
+        "Stock": true,
+        "Código": "DC-TT01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "DC",
+        "Género": "SUPERhEROES",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Holis Supremo",
+        "Título": "Holi",
+        "Precio": 35000,
+        "Stock": true,
+        "Código": "DC-HO01"
+    }
+]
