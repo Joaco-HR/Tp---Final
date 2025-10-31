@@ -3,11 +3,6 @@ import json
 import os
 os.system('cls' if os.name == 'nt' else 'clear')
 
-import time
-import json
-import os
-os.system('cls' if os.name == 'nt' else 'clear')
-
 def menu():
     print("\033[1;38;5;165m----------------***-----------------\033[0m")
     print("\033[1;38;5;10m  NADIE SE SALVA SOLO - COMIQUERÍA  \033[0m")
@@ -36,6 +31,20 @@ def guardar_catalogo(data):
     with open("catalogo.json", "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
+
+def abrir_vistas():
+    if not os.path.exists("vistas.json"):
+        return []
+    with open("vistas.json", encoding="utf-8") as file:
+        contenido = file.read().strip()
+        if not contenido:
+            return []
+        return json.loads(contenido)
+    
+def guardar_vistas(data):
+    with open("vistas.json", "w", encoding="utf-8") as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
+
 def abrir_catalogo():
     data = leer_catalogo()
     if not data:
@@ -58,6 +67,33 @@ def abrir_catalogo():
     input("\033[91mVolver atrás - Presiona Enter: \033[0m")
     return data
 
+class Historial:
+    def __init__(self):
+        self.ultimos_productos = abrir_vistas()
+    def agregar(self, producto):
+        if producto is None:  
+            return
+        if producto in self.ultimos_productos:
+            self.ultimos_productos.remove(producto)
+            self.ultimos_productos.append(producto)
+        else:
+            self.ultimos_productos.append(producto)
+            if len(self.ultimos_productos) > 5:
+                self.ultimos_productos.pop(0)
+        guardar_vistas(self.ultimos_productos)
+    def mostrar(self):
+        if not self.ultimos_productos:
+            print("\033[1;38;5;213mNo hay productos vistos recientemente.\033[0m")
+            return
+        contador = 1
+        tonos_rosa = [165, 171, 177, 183, 219]
+        for i, producto in enumerate(reversed(self.ultimos_productos)):
+            color = tonos_rosa[min(i, len(tonos_rosa) - 1)]
+            print(f"\033[1;38;5;{color}m {contador}- "f"{producto['Título']} - {producto['Editorial']}\033[0m")
+            contador += 1
+        print("")
+guardar_historial = Historial()
+
 class SimpleHashMap:
     def __init__(self, size=100):
         self.size = size
@@ -79,7 +115,7 @@ class SimpleHashMap:
         for k, v in bucket:
             if k == key:
                 return v
-        return None 
+        return None
     def remove(self, key):
         index = self.hash_function(key)
         bucket = self.buckets[index]
@@ -198,6 +234,7 @@ def gestion_productos():
     elif eleccion == 4:
         codigo = input("- Ingrese el código del producto: ")
         producto = hash_map.get(codigo)
+        guardar_historial.agregar(producto)
         if producto:
             print("Producto encontrado:")
             print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
@@ -225,7 +262,12 @@ while seleccion != 6:
         print("Sección de pedidos (en desarrollo).")
         input("\033[91mVolver atrás - Presiona Enter: \033[0m")
     elif seleccion == 4:
-        print("Última visualización (en desarrollo).")
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("\033[1;38;5;10m      Últimos Productos Vistos     \033[0m")
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("")
+        guardar_historial.mostrar()
+        print("")
         input("\033[91mVolver atrás - Presiona Enter: \033[0m")
     elif seleccion == 5:
         print("Categorizacion (en desarrollo).")
