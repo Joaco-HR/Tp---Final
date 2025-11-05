@@ -482,7 +482,9 @@ def abrir_categorias():
 
         if opcion_cat == "1":
             os.system('cls' if os.name == 'nt' else 'clear')
-            print("\033[1;38;5;10m--- Árbol Completo del Catálogo ---\033[0m\n")
+            print("\033[1;38;5;165m----------------***-----------------\033[0m")
+            print("\033[1;38;5;10m     Arbol - Categorias Completo  \033[0m")
+            print("\033[1;38;5;165m----------------***-----------------\n\033[0m")
             raiz.mostrar()
             input("\n\033[91mPresiona Enter para volver...\033[0m")
         elif opcion_cat == "2":
