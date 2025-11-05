@@ -21,43 +21,43 @@ def menu():
     return eleccion
 
 def leer_catalogo():
-    if not os.path.exists("catalogo.json"):
+    if not os.path.exists("json/catalogo.json"):
         return []
-    with open("catalogo.json", encoding="utf-8") as file:
+    with open("json/catalogo.json", encoding="utf-8") as file:
         contenido = file.read().strip()
         if not contenido:
             return []
         return json.loads(contenido)
 
 def guardar_catalogo(data):
-    with open("catalogo.json", "w", encoding="utf-8") as file:
+    with open("json/catalogo.json", "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 
 def abrir_vistas():
-    if not os.path.exists("vistas.json"):
+    if not os.path.exists("json/vistas.json"):
         return []
-    with open("vistas.json", encoding="utf-8") as file:
+    with open("json/vistas.json", encoding="utf-8") as file:
         contenido = file.read().strip()
         if not contenido:
             return []
         return json.loads(contenido)
     
 def guardar_vistas(data):
-    with open("vistas.json", "w", encoding="utf-8") as file:
+    with open("json/vistas.json", "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 def abrir_pedidos():
-    if not os.path.exists("pedidos.json"):
+    if not os.path.exists("json/pedidos.json"):
         return []
-    with open("pedidos.json", encoding="utf-8") as file:
+    with open("json/pedidos.json", encoding="utf-8") as file:
         contenido = file.read().strip()
         if not contenido:
             return []
         return json.loads(contenido)
     
 def guardar_pedidos(data):
-     with open("pedidos.json", "w", encoding="utf-8") as file:
+     with open("json/pedidos.json", "w", encoding="utf-8") as file:
         json.dump(list(data), file, ensure_ascii=False, indent=4)
         
 def input_texto(mensaje):
@@ -96,6 +96,12 @@ def input_codigo(mensaje):
             print("⚠️  El código no puede estar vacío.")
         elif " " in valor:
             print("⚠️  El código no debe contener espacios.")
+            
+        catalogo = leer_catalogo()
+        if any(p["Código"].upper() == valor.upper() for p in catalogo):
+            print("⚠️  Ese código ya existe. Intente con otro.")
+            time.sleep(1)
+            continue
         else:
             return valor
             
@@ -268,9 +274,6 @@ def gestion_productos():
             codigo = input_codigo("- Ingrese el código del producto: ")
     
             catalogo = leer_catalogo()
-            if any(p["Código"] == codigo for p in catalogo):
-                print("⚠️  Ese código ya existe.")
-                time.sleep(1)
     
             nuevo_producto = {
                 "Producto": producto,

@@ -1,16 +1,5 @@
 [
     {
-        "Producto": "Comic",
-        "Editorial": "DC",
-        "Género": "SuperHeroes",
-        "Alineación": "Equipo",
-        "Personaje/Equipo": "Teen Titans",
-        "Título": "Teen Titans and The Judas Contract",
-        "Precio": 45000,
-        "Stock": true,
-        "Código": "DC-TT01"
-    },
-    {
         "Producto": "Cómic",
         "Editorial": "Marvel",
         "Género": "Superhéroes",
@@ -53,5 +42,16 @@
         "Precio": 49000,
         "Stock": true,
         "Código": "DC-WW01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "DC",
+        "Género": "SuperHeroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Superman",
+        "Título": "Superman: Man of Tomorrow",
+        "Precio": 36000,
+        "Stock": true,
+        "Código": "DC-S01"
     }
 ]
