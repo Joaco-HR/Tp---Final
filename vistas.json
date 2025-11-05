@@ -2,28 +2,6 @@
     {
         "Producto": "Comic",
         "Editorial": "DC",
-        "Género": "AntiHeroes",
-        "Alineación": "Solitario",
-        "Personaje/Equipo": "Harley Quin",
-        "Título": "Harley Quin: Preludios y Chiste Malos",
-        "Precio": 44000,
-        "Stock": true,
-        "Código": "DC-HQ01"
-    },
-    {
-        "Producto": "Cómic",
-        "Editorial": "DC",
-        "Género": "Superhéroes",
-        "Alineación": "Solitario",
-        "Personaje/Equipo": "Wonder Woman",
-        "Título": "Wonder Woman: Spirit of Truth",
-        "Precio": 49000,
-        "Stock": true,
-        "Código": "DC-WW01"
-    },
-    {
-        "Producto": "Comic",
-        "Editorial": "DC",
         "Género": "SuperHeroes",
         "Alineación": "Equipo",
         "Personaje/Equipo": "Teen Titans",
@@ -53,5 +31,27 @@
         "Precio": 17000,
         "Stock": false,
         "Código": "JO-JO01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "Marvel",
+        "Género": "SuperHeroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Iron Man",
+        "Título": "Iron Man: Tales Of Suspense",
+        "Precio": 32000,
+        "Stock": true,
+        "Código": "MAR-IM01"
+    },
+    {
+        "Producto": "Cómic",
+        "Editorial": "DC",
+        "Género": "Superhéroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Wonder Woman",
+        "Título": "Wonder Woman: Spirit of Truth",
+        "Precio": 49000,
+        "Stock": true,
+        "Código": "DC-WW01"
     }
 ]

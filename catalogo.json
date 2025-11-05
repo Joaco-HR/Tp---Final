@@ -13,7 +13,7 @@
     {
         "Producto": "Cómic",
         "Editorial": "DC",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Solitario",
         "Personaje/Equipo": "Superman",
         "Título": "Superman: Man of Tomorrow",
@@ -97,5 +97,27 @@
         "Precio": 44000,
         "Stock": true,
         "Código": "DC-HQ01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "Marvel",
+        "Género": "SuperHeroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Captian America",
+        "Título": "Captian Amerca: The First Avenger",
+        "Precio": 45000,
+        "Stock": true,
+        "Código": "MAR-CA01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "Marvel",
+        "Género": "SuperHeroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Iron Man",
+        "Título": "Iron Man: Tales Of Suspense",
+        "Precio": 32000,
+        "Stock": true,
+        "Código": "MAR-IM01"
     }
 ]

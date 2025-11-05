@@ -60,6 +60,45 @@ def guardar_pedidos(data):
      with open("pedidos.json", "w", encoding="utf-8") as file:
         json.dump(list(data), file, ensure_ascii=False, indent=4)
         
+def input_texto(mensaje):
+    while True:
+        valor = input(mensaje).strip()
+        if not valor:
+            print("⚠️  Este campo no puede estar vacío.")
+            continue
+        if any(char.isdigit() for char in valor):
+            print("⚠️  No se permiten números. Intente nuevamente.")
+            continue
+        return valor
+
+def input_numero(mensaje):
+    while True:
+        valor = input(mensaje).strip()
+        if valor.isdigit():
+            return int(valor)
+        else:
+            print("⚠️  Solo se permiten números enteros positivos. Intente nuevamente.")
+            
+def input_stock(mensaje):
+    while True:
+        valor = input(mensaje).strip()
+        if valor == "True":
+            return True
+        elif valor == "False":
+            return False
+        else:
+            print("⚠️  Solo se permite ingresar 'True' o 'False'. Intente nuevamente.")
+
+def input_codigo(mensaje):
+    while True:
+        valor = input(mensaje).strip()
+        if valor == "":
+            print("⚠️  El código no puede estar vacío.")
+        elif " " in valor:
+            print("⚠️  El código no debe contener espacios.")
+        else:
+            return valor
+            
 def abrir_catalogo():
     data = leer_catalogo()
     if not data:
@@ -145,238 +184,143 @@ hash_map = SimpleHashMap()
 for comic in leer_catalogo():
     hash_map.put(comic["Código"], comic)
 
-class Categoria:
-    def __init__(self, nombre):
-        self.nombre = nombre
-        self.subcategorias = {}
-        self.productos = []
-
-    def agregar_subcategoria(self, subcat):
-        self.subcategorias[subcat.nombre] = subcat
-
-    def agregar_producto(self, producto):
-        self.productos.append(producto)
-
-    def obtener_todos_productos(self):
-        resultado = list(self.productos)
-        for subcat in self.subcategorias.values():
-            resultado.extend(subcat.obtener_todos_productos())
-        return resultado
-
-    def mostrar_arbol(self, nivel=0):
-        print("  " * nivel + f"- {self.nombre} ({len(self.productos)} productos)")
-        for subcat in self.subcategorias.values():
-            subcat.mostrar_arbol(nivel + 1)
-
-# ===================== Función para crear árbol de categorías =====================
-def crear_arbol_categorias(productos):
-    root = Categoria("Categorías")
-    tipo_map = {}
-    for p in productos:
-        tipo = p["Producto"]
-        editorial = p["Editorial"]
-        personaje = p["Personaje/Equipo"]
-
-        # Crear categoría tipo
-        if tipo not in tipo_map:
-            tipo_map[tipo] = Categoria(tipo)
-            root.agregar_subcategoria(tipo_map[tipo])
-        tipo_cat = tipo_map[tipo]
-
-        # Crear subcategoría editorial
-        if editorial not in tipo_cat.subcategorias:
-            tipo_cat.agregar_subcategoria(Categoria(editorial))
-        editorial_cat = tipo_cat.subcategorias[editorial]
-
-        # Crear subcategoría personaje/equipo
-        if personaje not in editorial_cat.subcategorias:
-            editorial_cat.agregar_subcategoria(Categoria(personaje))
-        personaje_cat = editorial_cat.subcategorias[personaje]
-
-        # Agregar producto final
-        personaje_cat.agregar_producto(p)
-
-    return root
-
-# ===================== Función para mostrar productos por categoría =====================
-def explorar_categorias():
-    productos = leer_catalogo()
-    if not productos:
-        print("No hay productos en el catálogo.")
-        input("Presiona Enter para volver...")
-        return
-    root = crear_arbol_categorias(productos)
-
-    nodo_actual = root
-    path = []
-
+def gestion_productos():
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(f"\033[1;38;5;165m{' > '.join([n.nombre for n in path] + [nodo_actual.nombre])}\033[0m")
-        print("Subcategorías:")
-        for i, subcat in enumerate(nodo_actual.subcategorias.values(), 1):
-            print(f"  {i}- {subcat.nombre} ({len(subcat.obtener_todos_productos())} productos)")
-        print("0- Volver atrás")
-        print("p- Ver productos en esta categoría")
-        eleccion = input("Ingrese opción: ").strip().lower()
-        if eleccion == "0":
-            if not path:
-                break
-            nodo_actual = path.pop()
-        elif eleccion == "p":
-            productos = nodo_actual.obtener_todos_productos()
-            if not productos:
-                print("No hay productos en esta categoría.")
-            else:
-                print(f"\nProductos en {nodo_actual.nombre}:")
-                for prod in productos:
-                    print(f"- {prod['Título']} ({prod['Editorial']}) - ${prod['Precio']}")
-            input("\nPresiona Enter para continuar...")
-        elif eleccion.isdigit() and 1 <= int(eleccion) <= len(nodo_actual.subcategorias):
-            idx = int(eleccion) - 1
-            subcat = list(nodo_actual.subcategorias.values())[idx]
-            path.append(nodo_actual)
-            nodo_actual = subcat
-        else:
-            print("Opción no válida.")
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("\033[1;38;5;10m        Gestión  -  Productos  \033[0m")
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("")
+        print("\033[1;38;5;33m 1- Agregar Producto\033[0m")
+        print("\033[1;38;5;31m 2- Actualizar Producto\033[0m")
+        print("\033[1;38;5;99m 3- Eliminar Producto\033[0m")
+        print("\033[1;38;5;53m 4- Buscar Producto por Código\033[0m")
+        print("\033[1;38;5;213m 5- Volver\033[0m")
+        print("")
+    
+        eleccion = input("Ingrese la opción que desea: ").strip()
+    
+        if eleccion == "1":
+            producto = input_texto("- Ingrese el tipo de producto que quieras anexar: ")
+            titulo = input_texto("- Ingrese el nombre de la historieta: ")
+            editorial = input_texto("- Ingrese el nombre de la editorial: ")
+            genero = input_texto("- Ingrese el género de la historieta: ")
+            alineacion = input_texto("- Ingrese si se trata de una historia en solitario o de un equipo: ")
+            personaje = input_texto("- Ingresa el nombre del protagonista o equipo de la historia: ")
+            precio = input_numero("- Ingrese el precio de tu historieta: ")
+            stock = input_stock("- Ingrese el valor del Stock(TRUE/FALSE): ")
+            codigo = input_codigo("- Ingrese el código del producto: ")
+    
+            catalogo = leer_catalogo()
+            if any(p["Código"] == codigo for p in catalogo):
+                print("⚠️  Ese código ya existe.")
+                time.sleep(1)
+    
+            nuevo_producto = {
+                "Producto": producto,
+                "Editorial": editorial,
+                "Género": genero,
+                "Alineación": alineacion,
+                "Personaje/Equipo": personaje,
+                "Título": titulo,
+                "Precio": precio,
+                "Stock": stock,
+                "Código": codigo
+            }
+    
+            catalogo.append(nuevo_producto)
+            guardar_catalogo(catalogo)
+            hash_map.put(codigo, nuevo_producto)
+            print("✅ Producto agregado correctamente!")
             time.sleep(1)
-
-def gestion_productos():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\033[1;38;5;165m----------------***-----------------\033[0m")
-    print("\033[1;38;5;10m        Gestión  -  Productos  \033[0m")
-    print("\033[1;38;5;165m----------------***-----------------\033[0m")
-    print("")
-    print("\033[1;38;5;33m 1- Agregar Producto\033[0m")
-    print("\033[1;38;5;31m 2- Actualizar Producto\033[0m")
-    print("\033[1;38;5;99m 3- Eliminar Producto\033[0m")
-    print("\033[1;38;5;53m 4- Buscar Producto por Código\033[0m")
-    print("\033[1;38;5;213m 5- Volver\033[0m")
-    print("")
-    eleccion = input(f"Ingrese la opción que desea: ")
-    if eleccion == "1":
-        producto = input("- Ingrese el tipo de producto que quieras anexar: ")
-        titulo = input("- Ingrese el nombre de la historieta: ")
-        editorial = input("- Ingrese el nombre de la editorial: ")
-        genero = input("- Ingrese el género de la historieta: ")
-        alineacion = input("- Ingrese si se trata de una historia en solitario o de un equipo: ")
-        personaje = input("- Ingresa el nombre del protagonista o equipo de la historia: ")    
-        precio = int(input("- Ingrese el precio de tu historieta: "))
-        codigo = input("- Ingrese el código del producto: ")
-        catalogo = leer_catalogo()
-        if any(p["Código"] == codigo for p in catalogo):
-            print("Ese código ya existe.")
-            time.sleep(1)
-            return gestion_productos()
-        nuevo_producto = {
-            "Producto": producto,
-            "Editorial": editorial,
-            "Género": genero,
-            "Alineación": alineacion,
-            "Personaje/Equipo": personaje,
-            "Título": titulo,
-            "Precio": precio,
-            "Stock": True,
-            "Código": codigo
-        }
-        catalogo.append(nuevo_producto)
-        guardar_catalogo(catalogo)
-        hash_map.put(codigo, nuevo_producto)
-        print("Producto agregado correctamente!")
-        time.sleep(1)
-        return gestion_productos()
-    elif eleccion == "2":
-        codigo = input("- Ingrese el código del producto: ")
-        producto = hash_map.get(codigo)
-        if producto:
-            print("Producto encontrado:")
-            print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
-            for clave, valor in producto.items():
-                if clave not in ("Editorial", "Título"):
-                    if clave == "Precio":
-                        print(f"\033[93m{clave}:\033[0m ${valor}")
-                    else:
-                        print(f"\033[93m{clave}:\033[0m {valor}")
-            campo = input("Ingrese el campo que desea modificar: ")
-            campo_real = None
-            for k in producto.keys():
-                if k.lower() == campo.lower():
-                    campo_real = k
-                    break
-            if campo_real:
-                if campo_real == "Precio": 
-                    producto[campo_real] = int(input(f"Ingrese el nuevo precio, precio actual \033[92m${producto[campo_real]}\033[0m: ")) 
-                elif campo_real == "Stock": 
-                    producto[campo_real] = input(f"¿Hay stock? (True/False), actualmente \033[96m{producto[campo_real]}\033[0m: ").capitalize() == "True" 
-                else: 
-                    producto[campo_real] = input(f"Ingrese el nuevo valor para {campo_real}, valor actuaL \033[96m{producto[campo_real]}\033[0m: ")
-                hash_map.put(codigo, producto)
-                catalogo = leer_catalogo()
-                for i, p in enumerate(catalogo):
-                    if p["Código"] == codigo:
-                        catalogo[i] = producto
+        elif eleccion == "2":
+            codigo = input("- Ingrese el código del producto: ").upper()
+            producto = hash_map.get(codigo)
+            if producto:
+                print("Producto encontrado:")
+                print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
+                for clave, valor in producto.items():
+                    if clave not in ("Editorial", "Título"):
+                        if clave == "Precio":
+                            print(f"\033[93m{clave}:\033[0m ${valor}")
+                        else:
+                            print(f"\033[93m{clave}:\033[0m {valor}")
+                campo = input_texto("Ingrese el campo que desea modificar: ")
+                campo_real = None
+                for k in producto.keys():
+                    if k.lower() == campo.lower():
+                        campo_real = k
                         break
-                guardar_catalogo(catalogo)
-                print("Producto actualizado correctamente!")
-                time.sleep(1)
+                if campo_real:
+                    if campo_real == "Precio": 
+                        producto[campo_real] = int(input(f"Ingrese el nuevo precio, precio actual \033[92m${producto[campo_real]}\033[0m: ")) 
+                    elif campo_real == "Stock": 
+                        producto[campo_real] = input(f"¿Hay stock? (True/False), actualmente \033[96m{producto[campo_real]}\033[0m: ").capitalize() == "True" 
+                    else: 
+                        producto[campo_real] = input(f"Ingrese el nuevo valor para {campo_real}, valor actuaL \033[96m{producto[campo_real]}\033[0m: ")
+                    hash_map.put(codigo, producto)
+                    catalogo = leer_catalogo()
+                    for i, p in enumerate(catalogo):
+                        if p["Código"] == codigo:
+                            catalogo[i] = producto
+                            break
+                    guardar_catalogo(catalogo)
+                    print("Producto actualizado correctamente!")
+                    time.sleep(1)
+                else:
+                    print("Campo no válido.")
+                    time.sleep(1)
             else:
-                print("Campo no válido.")
+                print("Producto no encontrado.")
                 time.sleep(1)
-        else:
-            print("Producto no encontrado.")
-            time.sleep(1)
-        return gestion_productos()
-    elif eleccion == "3":
-        codigo = input("- Ingrese el código del producto: ")
-        producto = hash_map.get(codigo)
-        if producto:
-            print("Producto encontrado:")
-            print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
-            for clave, valor in producto.items():
-                if clave not in ("Editorial", "Título"):
-                    if clave == "Precio":
-                        print(f"\033[93m{clave}:\033[0m ${valor}")
-                    else:
-                        print(f"\033[93m{clave}:\033[0m {valor}")
-            confirmacion = input("¿Está seguro que desea eliminar este producto? (si/no): ").lower()
-            if confirmacion == "si":
-                hash_map.remove(codigo)
-                catalogo = leer_catalogo()
-                catalogo = [p for p in catalogo if p["Código"] != codigo]
-                guardar_catalogo(catalogo)
-                print("Producto eliminado correctamente!")
-                time.sleep(1)
+        elif eleccion == "3":
+            codigo = input("- Ingrese el código del producto: ").upper()
+            producto = hash_map.get(codigo)
+            if producto:
+                print("Producto encontrado:")
+                print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
+                for clave, valor in producto.items():
+                    if clave not in ("Editorial", "Título"):
+                        if clave == "Precio":
+                            print(f"\033[93m{clave}:\033[0m ${valor}")
+                        else:
+                            print(f"\033[93m{clave}:\033[0m {valor}")
+                confirmacion = input_texto("¿Está seguro que desea eliminar este producto? (si/no): ").lower()
+                if confirmacion == "si":
+                    hash_map.remove(codigo)
+                    catalogo = leer_catalogo()
+                    catalogo = [p for p in catalogo if p["Código"] != codigo]
+                    guardar_catalogo(catalogo)
+                    print("Producto eliminado correctamente!")
+                    time.sleep(1)
+                else:
+                    print("Eliminación cancelada.")
+                    time.sleep(1)
             else:
-                print("Eliminación cancelada.")
+                print("Producto no encontrado.")
                 time.sleep(1)
+        elif eleccion == "4":
+            codigo = input("- Ingrese el código del producto: ").upper()
+            producto = hash_map.get(codigo)
+            if producto:
+                guardar_historial.agregar(producto)
+                print("Producto encontrado:")
+                print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
+                for clave, valor in producto.items():
+                    if clave not in ("Editorial", "Título"):
+                        if clave == "Precio":
+                            print(f"\033[93m{clave}:\033[0m ${valor}")
+                        else:
+                            print(f"\033[93m{clave}:\033[0m {valor}")
+            else:
+                print("Producto no encontrado.")
+            input("\033[91mPresiona Enter para continuar...\033[0m")
+        elif eleccion == "5":
+            return
         else:
-            print("Producto no encontrado.")
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("⚠️  Opción no válida.")
             time.sleep(1)
-        return gestion_productos()
-    elif eleccion == "4":
-        codigo = input("- Ingrese el código del producto: ")
-        producto = hash_map.get(codigo)
-        if producto:
-            guardar_historial.agregar(producto)
-            print("Producto encontrado:")
-            print(f"\033[1;38;5;10m\033[4m{producto['Título']} - {producto['Editorial']}\033[0m")
-            for clave, valor in producto.items():
-                if clave not in ("Editorial", "Título"):
-                    if clave == "Precio":
-                        print(f"\033[93m{clave}:\033[0m ${valor}")
-                    else:
-                        print(f"\033[93m{clave}:\033[0m {valor}")
-        else:
-            print("Producto no encontrado.")
-        input("\033[91mPresiona Enter para continuar...\033[0m")
-        return gestion_productos()
-    elif eleccion == "5":
-        return
-    else:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("Opción no válida.")
-        time.sleep(1)
-        return gestion_productos()
 
 cola_pedidos = deque(abrir_pedidos())
 
@@ -390,15 +334,15 @@ def pedidos():
         print("\033[1;38;5;33m 1- Nuevo pedido\033[0m")          
         print("\033[1;38;5;31m 2- Ver pedidos pendientes\033[0m") 
         print("\033[1;38;5;99m 3- Procesar siguiente pedido\033[0m") 
-        print("\033[1;38;5;53m4- Volver\033[0m")
+        print("\033[1;38;5;53m 4- Volver\033[0m")
         print("")
         eleccion = input(f"Ingrese la opción que desea: ")
 
         if eleccion == "1":
-            cliente = input("Nombre del cliente: ")
+            cliente = input_texto("Nombre del cliente: ")
             carrito = []
             while True:
-                codigo = input("Código del producto: ").strip().upper()
+                codigo = input("Código del producto: ").upper()
                 producto = hash_map.get(codigo)
                 if producto:
                     if producto["Stock"]:
@@ -409,23 +353,20 @@ def pedidos():
                                     print(f"\033[93m- {clave}:\033[0m ${valor}")
                                 else:
                                     print(f"\033[93m- {clave}:\033[0m {valor}")
-                        cantidad = input("\nCantidad deseada: ")
-                        if not cantidad.isdigit() or int(cantidad) <= 0:
-                            print("\033[91mCantidad inválida.\033[0m")
-                            continue
+                        cantidad = input_numero("\nCantidad deseada: ")
                         cantidad = int(cantidad)
                         carrito.append({"producto": producto, "cantidad": cantidad})
-                        otro = input("¿Deseas agregar otro producto al pedido? (si/no): ").lower()
+                        otro = input_texto("¿Deseas agregar otro producto al pedido? (si/no): ").lower()
                         if otro != "si":
                             break
                     else:
-                        print("\n\033[91mEste producto no tiene stock disponible.\033[0m")
-                        continuar = input("¿Deseas buscar otro producto al pedido? (si/no): ").lower()
+                        print("\n\033[91m ⚠️  Este producto no tiene stock disponible.\033[0m")
+                        continuar = input_texto("¿Deseas buscar otro producto al pedido? (si/no): ").lower()
                         if continuar != "si":
                             break
                 else:
-                    print("\033[91mCódigo no encontrado.\033[0m")
-                    continuar = input("¿Deseas buscar otro producto al pedido? (si/no): ").lower()
+                    print("\033[91m⚠️  Código no encontrado.\033[0m")
+                    continuar = input_texto("¿Deseas buscar otro producto al pedido? (si/no): ").lower()
                     if continuar != "si":
                         break
             if carrito:
@@ -456,12 +397,14 @@ def pedidos():
                 for item in atendido["productos"]:
                     prod = item["producto"]
                     print(f"   - {item['cantidad']}x {prod['Título']} ({prod['Editorial']})")
+                print("Procesando Pedido...")
+                time.sleep(3)
             input("\033[91mPresiona Enter para continuar...\033[0m")
         elif eleccion == "4":
             return
         else:
             os.system('cls' if os.name == 'nt' else 'clear')
-            print("Opción no válida.")
+            print("⚠️  Opción no válida.")
             time.sleep(1)
             return pedidos()
     
@@ -483,11 +426,12 @@ while seleccion != "6":
         print("")
         input("\033[91mPresiona Enter para continuar...\033[0m")
     elif seleccion == "5":
-        explorar_categorias()
+        print("Categorizacion (en desarrollo).")
+        input("\033[91mPresiona Enter para continuar...\033[0m")
     elif seleccion == "6":
         break
     else:
-        print("Opción no válida.")
+        print("⚠️  Opción no válida.")
         time.sleep(1)
     os.system('cls' if os.name == 'nt' else 'clear')
     seleccion = menu()
