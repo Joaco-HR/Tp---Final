@@ -1,5 +1,5 @@
 # Tp---Final
-    Este programa se trata de la base de datos de una comiquería que permite ver el catálogo, gestionar los productos, realizar pedidos, ver el historial de los últimos 5 productos vistos y visualizar los productos por categorías.
+Este programa se trata de la base de datos de una comiquería que permite ver el catálogo, gestionar los productos, realizar pedidos, ver el historial de los últimos 5 productos vistos y        visualizar los productos por categorías.
 
 Cómo usarlo:
     Para ejecutarlo, cargá el archivo en Python o en Visual Studio Code y presioná F5.
