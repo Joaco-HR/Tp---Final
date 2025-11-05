@@ -1,8 +1,8 @@
 [
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "DC",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Solitario",
         "Personaje/Equipo": "Batman",
         "Título": "Batman Return",
@@ -11,7 +11,7 @@
         "Código": "DC-B01"
     },
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "DC",
         "Género": "SuperHeroes",
         "Alineación": "Solitario",
@@ -22,9 +22,9 @@
         "Código": "DC-S01"
     },
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "DC",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Solitario",
         "Personaje/Equipo": "Wonder Woman",
         "Título": "Wonder Woman: Spirit of Truth",
@@ -33,9 +33,9 @@
         "Código": "DC-WW01"
     },
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "DC",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Equipo",
         "Personaje/Equipo": "Justice League",
         "Título": "La Trinidad",
@@ -44,9 +44,9 @@
         "Código": "DC-JL01"
     },
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "Marvel",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Solitario",
         "Personaje/Equipo": "Spider-Man",
         "Título": "Spider-Man: First Year",
@@ -55,9 +55,9 @@
         "Código": "MAR-S01"
     },
     {
-        "Producto": "Cómic",
+        "Producto": "Comic",
         "Editorial": "Marvel",
-        "Género": "Superhéroes",
+        "Género": "SuperHeroes",
         "Alineación": "Equipo",
         "Personaje/Equipo": "Avengers",
         "Título": "Civil War",
@@ -119,5 +119,16 @@
         "Precio": 32000,
         "Stock": true,
         "Código": "MAR-IM01"
+    },
+    {
+        "Producto": "Comic",
+        "Editorial": "DC",
+        "Género": "SuperHeroes",
+        "Alineación": "Solitario",
+        "Personaje/Equipo": "Superman",
+        "Título": "Superman Kingdom Come",
+        "Precio": 50000,
+        "Stock": true,
+        "Código": "DC-S02"
     }
 ]

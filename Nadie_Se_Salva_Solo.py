@@ -99,7 +99,7 @@ def input_codigo(mensaje):
         else:
             return valor
             
-def abrir_catalogo():
+def mostrar_catalogo():
     data = leer_catalogo()
     if not data:
         print("El catálogo está vacío.")
@@ -151,6 +151,64 @@ class Historial:
 
 guardar_historial = Historial()
 
+class Categoria:
+    COLORES_NIVELES = ["\033[38;5;226m","\033[38;5;220m","\033[38;5;214m","\033[38;5;178m","\033[38;5;136m"]
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.subcategorias = {}
+        self.productos = []
+
+    def agregar_producto(self, niveles, producto):
+        if not niveles:
+            self.productos.append(producto)
+            return
+        nivel = niveles[0]
+        if nivel not in self.subcategorias:
+            self.subcategorias[nivel] = Categoria(nivel)
+        self.subcategorias[nivel].agregar_producto(niveles[1:], producto)
+
+    def color_por_nivel(self, nivel):
+        return self.COLORES_NIVELES[nivel] if nivel < len(self.COLORES_NIVELES) else self.COLORES_NIVELES[-1]
+
+    def mostrar(self, nivel=0):
+        sangria = "   " * nivel
+        color = self.color_por_nivel(nivel)
+        print(f"{sangria}{color}- {self.nombre}\033[0m")
+
+        for sub in self.subcategorias.values():
+            sub.mostrar(nivel + 1)
+
+        for p in self.productos:
+            print(f"{sangria}   - {p['Título']}")
+
+    def buscar_categoria(self, nombre):
+        resultados = []
+        if self.nombre.lower() == nombre.lower():
+            resultados.append(self)
+        for sub in self.subcategorias.values():
+            resultados.extend(sub.buscar_categoria(nombre))
+        return resultados
+
+    def mostrar_resultados(self, nombre):
+        resultados = self.buscar_categoria(nombre)
+        if not resultados:
+            print("\033[91mNo se encontraron categorías con ese nombre.\033[0m")
+        else:
+            for nodo in resultados:
+                print(f"\n\033[1;38;5;171mResultados para \033[1;33m{nodo.nombre}\033[0m:")
+                nodo.mostrar()
+
+def construir_arbol_catalogo(catalogo):
+    raiz = Categoria("Categorías")
+    for producto in catalogo:
+        niveles = [
+            producto.get("Producto", "Desconocido"),
+            producto.get("Editorial", "Desconocido"),
+            producto.get("Personaje/Equipo", "General")
+        ]
+        raiz.agregar_producto(niveles, producto)
+    return raiz
+
 class SimpleHashMap:
     def __init__(self, size=100):
         self.size = size
@@ -197,9 +255,7 @@ def gestion_productos():
         print("\033[1;38;5;53m 4- Buscar Producto por Código\033[0m")
         print("\033[1;38;5;213m 5- Volver\033[0m")
         print("")
-    
         eleccion = input("Ingrese la opción que desea: ").strip()
-    
         if eleccion == "1":
             producto = input_texto("- Ingrese el tipo de producto que quieras anexar: ")
             titulo = input_texto("- Ingrese el nombre de la historieta: ")
@@ -398,7 +454,7 @@ def pedidos():
                     prod = item["producto"]
                     print(f"   - {item['cantidad']}x {prod['Título']} ({prod['Editorial']})")
                 print("Procesando Pedido...")
-                time.sleep(3)
+                time.sleep(2    )
             input("\033[91mPresiona Enter para continuar...\033[0m")
         elif eleccion == "4":
             return
@@ -407,12 +463,43 @@ def pedidos():
             print("⚠️  Opción no válida.")
             time.sleep(1)
             return pedidos()
-    
+
+def abrir_categorias():
+    while True:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("\033[1;38;5;10m       BÚSQUEDA POR CATEGORÍAS      \033[0m")
+        print("\033[1;38;5;165m----------------***-----------------\033[0m")
+        print("")
+        print("\033[1;38;5;33m 1- Ver árbol completo\033[0m")
+        print("\033[1;38;5;99m 2- Buscar categoría específica\033[0m")
+        print("\033[1;38;5;213m 3- Volver\033[0m")
+        print("")
+
+        opcion_cat = input("Ingrese la opción que desea: ").strip()
+        catalogo = leer_catalogo()
+        raiz = construir_arbol_catalogo(catalogo)
+
+        if opcion_cat == "1":
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("\033[1;38;5;10m--- Árbol Completo del Catálogo ---\033[0m\n")
+            raiz.mostrar()
+            input("\n\033[91mPresiona Enter para volver...\033[0m")
+        elif opcion_cat == "2":
+            nombre = input_texto("Ingrese el nombre de la categoría a buscar: ").strip()
+            raiz.mostrar_resultados(nombre)
+            input("\n\033[91mPresiona Enter para volver...\033[0m")
+        elif opcion_cat == "3":
+            break
+        else:
+            print("⚠️  Opción no válida.")
+            time.sleep(1)
+
 seleccion = menu()
 while seleccion != "6":
     os.system('cls' if os.name == 'nt' else 'clear')
     if seleccion == "1":
-        abrir_catalogo()
+        mostrar_catalogo()
     elif seleccion == "2":
         gestion_productos()
     elif seleccion == "3":
@@ -426,8 +513,7 @@ while seleccion != "6":
         print("")
         input("\033[91mPresiona Enter para continuar...\033[0m")
     elif seleccion == "5":
-        print("Categorizacion (en desarrollo).")
-        input("\033[91mPresiona Enter para continuar...\033[0m")
+        abrir_categorias()
     elif seleccion == "6":
         break
     else:
